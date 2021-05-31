@@ -15,7 +15,6 @@ class SecondFragment : Fragment() {
     private var result: TextView? = null
     private lateinit var fragmentValue: OnFragmentValue
 
-
     override fun onAttach(context: Context) {
         super.onAttach(context)
         fragmentValue = context as OnFragmentValue
@@ -40,10 +39,10 @@ class SecondFragment : Fragment() {
 
         result?.text = generate(min, max).toString()
 
+        fragmentValue.onValueRandomIsSecondFragment(result?.text.toString().toInt())
+
         backButton?.setOnClickListener {
             fragmentValue.transferFragmentValue(result?.text.toString().toInt())
-            //TODO
-
         }
     }
 
@@ -53,20 +52,21 @@ class SecondFragment : Fragment() {
 
     interface OnFragmentValue{
         fun transferFragmentValue(value: Int)
+        fun onValueRandomIsSecondFragment(value: Int)
     }
 
     companion object {
-
         @JvmStatic
         fun newInstance(min: Int, max: Int): SecondFragment {
             return SecondFragment().apply {
                 arguments = bundleOf(MIN_VALUE_KEY to min, MAX_VALUE_KEY to max)
             }
         }
-        @JvmStatic
-        var flagBack = false
 
         private const val MIN_VALUE_KEY = "MIN_VALUE"
         private const val MAX_VALUE_KEY = "MAX_VALUE"
+
+        @JvmStatic
+        var flagBack = false
     }
 }

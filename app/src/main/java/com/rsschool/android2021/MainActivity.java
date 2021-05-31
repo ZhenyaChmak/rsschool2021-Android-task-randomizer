@@ -8,12 +8,15 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 public class MainActivity extends AppCompatActivity
-        implements FirstFragment.OnFragmentMinMax, SecondFragment.OnFragmentValue {
+        implements FirstFragment.OnFragmentMinMax, SecondFragment.OnFragmentValue{
+
+    private int valueRandomIsSecondFragment = 0;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         if(savedInstanceState == null) {
             openFirstFragment(0);
         }
@@ -44,17 +47,16 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    public void onBackPressed(){
-        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.container);
-        if(SecondFragment.getFlagBack()){
+    public void onValueRandomIsSecondFragment(int valueRandomIsSecondFragment){
+        this.valueRandomIsSecondFragment = valueRandomIsSecondFragment;
+    }
 
-            openFirstFragment(12);
+    @Override
+    public void onBackPressed(){
+        if(SecondFragment.getFlagBack()){
+           transferFragmentValue(valueRandomIsSecondFragment);
         } else {
             super.onBackPressed();
         }
-    }
-    public int valueButton(int value){
-        return value;
-        //TODO
     }
 }
