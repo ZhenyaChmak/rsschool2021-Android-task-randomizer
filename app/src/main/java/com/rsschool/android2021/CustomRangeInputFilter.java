@@ -19,6 +19,7 @@ public class CustomRangeInputFilter implements InputFilter {
             if(Integer.MIN_VALUE<=val&&val<=Integer.MAX_VALUE)
                 return null;
         }catch (NumberFormatException e){
+                System.out.println(e);
         }
         return "";
     }

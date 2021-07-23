@@ -20,8 +20,8 @@ class FirstFragment : Fragment() {
 
     private var generateButton: Button? = null
     private var previousResult: TextView? = null
-    private lateinit var minValue : EditText
-    private lateinit var maxValue : EditText
+    private lateinit var minValue: EditText
+    private lateinit var maxValue: EditText
     private lateinit var fragmentMinMax: OnFragmentMinMax
 
     override fun onAttach(context: Context) {
@@ -47,24 +47,27 @@ class FirstFragment : Fragment() {
         SecondFragment.flagBack = false
         generateButton?.let { it.isEnabled = false }
 
+
         val result = arguments?.getInt(PREVIOUS_RESULT_KEY)
         previousResult?.text = "Previous result: ${result.toString()}"
 
         generateButton?.setOnClickListener {
-            val min: Int = if(minValue.text.isNotEmpty()) minValue.text.toString().toInt() else -1
-            val max: Int = if(maxValue.text.isNotEmpty()) maxValue.text.toString().toInt() else -1
+            val min: Int = if (minValue.text.isNotEmpty()) minValue.text.toString().toInt() else -1
+            val max: Int = if (maxValue.text.isNotEmpty()) maxValue.text.toString().toInt() else -1
             when {
                 min == -1 -> generateButton?.let { it.isEnabled = false }
                 max == -1 -> generateButton?.let { it.isEnabled = false }
-                minValue.length()>10 -> generateButton?.let { it.isEnabled = false }
-                maxValue.length()>10 -> generateButton?.let { it.isEnabled = false }
-                else -> fragmentMinMax.transferFragmentMinMax(min,max)
+                minValue.length() > 10 -> generateButton?.let { it.isEnabled = false }
+                maxValue.length() > 10 -> generateButton?.let { it.isEnabled = false }
+                else -> fragmentMinMax.transferFragmentMinMax(min, max)
             }
         }
 
         //реализация ограничения по значению
-        minValue.filters = arrayOf<InputFilter>(CustomRangeInputFilter(Int.MIN_VALUE, Int.MAX_VALUE))
-        maxValue.filters = arrayOf<InputFilter>(CustomRangeInputFilter(Int.MIN_VALUE, Int.MAX_VALUE))
+        minValue.filters =
+            arrayOf<InputFilter>(CustomRangeInputFilter(Int.MIN_VALUE, Int.MAX_VALUE))
+        maxValue.filters =
+            arrayOf<InputFilter>(CustomRangeInputFilter(Int.MIN_VALUE, Int.MAX_VALUE))
 
         //условия
         val textWatcher = object : TextWatcher {
@@ -75,36 +78,40 @@ class FirstFragment : Fragment() {
 
             //во время текста
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                if(count < 1) generateButton?.let { it.isEnabled = false }
-
+                if (count < 1) generateButton?.let { it.isEnabled = false }
             }
 
             //после ввода текста
             override fun afterTextChanged(s: Editable?) {
-                val min = if(minValue.text.isNotEmpty()) minValue.text.toString().toInt() else -1
-                val max = if(maxValue.text.isNotEmpty()) maxValue.text.toString().toInt() else -1
+                val min =
+                    if (minValue.text.isNotEmpty()) minValue.text.toString().toInt() else -1
+                val max =
+                    if (maxValue.text.isNotEmpty()) maxValue.text.toString().toInt() else -1
 
-                if(min > max) generateButton?.let { it.isEnabled = false }
+                if (min > max) generateButton?.let { it.isEnabled = false }
                 else generateButton?.let { it.isEnabled = true }
             }
         }
 
-        minValue.addTextChangedListener(textWatcher)
-        maxValue.addTextChangedListener(textWatcher)
+                minValue.addTextChangedListener(textWatcher)
+                maxValue.addTextChangedListener(textWatcher)
     }
 
-    interface OnFragmentMinMax {
-        fun transferFragmentMinMax (min: Int, max : Int)
-    }
-
-    companion object {
-        @JvmStatic
-        fun newInstance(previousResult: Int): FirstFragment {
-            return FirstFragment().apply {
-                arguments = bundleOf(PREVIOUS_RESULT_KEY to previousResult)
-            }
+        interface OnFragmentMinMax {
+            fun transferFragmentMinMax(min: Int, max: Int)
         }
 
-        private const val PREVIOUS_RESULT_KEY = "PREVIOUS_RESULT"
-    }
+        companion object {
+            @JvmStatic
+            fun newInstance(previousResult: Int): FirstFragment {
+                return FirstFragment().apply {
+                    arguments = bundleOf(PREVIOUS_RESULT_KEY to previousResult)
+                }
+            }
+
+            private const val PREVIOUS_RESULT_KEY = "PREVIOUS_RESULT"
+        }
 }
+
+
+
